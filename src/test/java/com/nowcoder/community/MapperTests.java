@@ -32,8 +32,11 @@ public class MapperTests {
         User user = userMapper.selectById(146);
         System.out.println(user);
 
-//        user = userMapper.selectByName("lihonghe");
-//        System.out.println(user);
+        user = userMapper.selectByName("lihonghe");
+        System.out.println(user);
+
+        user = userMapper.selectByEmail("yifan@gmail.com");
+        System.out.println(user);
     }
 
     @Test
@@ -44,7 +47,13 @@ public class MapperTests {
 
     @Test
     public void testUpdateUser(){
-        userMapper.updateStatus(150, 10);
+        userMapper.updateStatus(150, 789);
+        userMapper.updateHeader(150, "http://new.hearderurl.com");
+        userMapper.updatePassword(150, "newpassword");
+
+        User user;
+        user = userMapper.selectByEmail("yifan@gmail.com");
+        System.out.println(user);
     }
 
     @Test
