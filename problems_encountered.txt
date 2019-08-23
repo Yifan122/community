@@ -1,0 +1,5 @@
+# Mysql Database Server connection failed
+1. check the Mysql Database Server is running or not.
+    -> if not, start the Mysql Server:
+    -> sudo /usr/local/mysql-8.0.17-macos10.14-x86_64/support-files/mysql.server start
+    -> ref: http://www.mysqltutorial.org/mysql-create-database/
