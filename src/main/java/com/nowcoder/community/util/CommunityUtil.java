@@ -9,7 +9,7 @@ public class CommunityUtil {
 
     // 生成随机字符串
     public static String generateUUID(){
-        return UUID.randomUUID().toString().replaceAll("_", "");
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     // MD5 加密

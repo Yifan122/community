@@ -2,6 +2,8 @@ package com.nowcoder.community.service;
 
 import com.nowcoder.community.dao.UserMapper;
 import com.nowcoder.community.entity.User;
+import com.nowcoder.community.util.CommunityConstant;
+import com.nowcoder.community.util.CommunityUtil;
 import com.nowcoder.community.util.MailClient;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -10,12 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 @Service
-public class UserService {
+public class UserService implements CommunityConstant {
 
     private final static Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -69,9 +74,45 @@ public class UserService {
 
         if(userMapper.selectByEmail(user.getEmail()) != null){
             map.put("emailMsg", "邮箱已被占用");
+            return map;
         }
 
+        user.setSalt(CommunityUtil.generateUUID().substring(0, 5));
+        user.setPassword(CommunityUtil.md5(user.getPassword()+user.getSalt()));
+        user.setType(0);
+        user.setStatus(0);
+        user.setActivationCode(CommunityUtil.generateUUID());
+        user.setHeaderUrl(String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000)));
+        user.setCreateTime(new Date());
+        userMapper.insertUser(user);
 
+        Context context = new Context();
+        context.setVariable("email", user.getEmail());
+
+        System.out.println(user.getEmail());
+
+        // set activation url http://localhost:8081/community/activation/101/activationCode
+        String activationUrl = domain+contextPath+"/activation/" + user.getId() + "/" +user.getActivationCode();
+        context.setVariable("url", activationUrl);
+        String content = templateEngine.process("/mail/activation", context);
+
+        // TO DO: send Mail
+        mailClient.sendMail("838145518@qq.com", "Activation Email", content);
+        System.out.println(content);
+        System.out.println(activationUrl);
         return map;
+    }
+
+    public int activation(int userId, String code) {
+        User user = userMapper.selectById(userId);
+
+        if(user.getStatus() == 1) {
+            return ACTIVATION_REPEAT;
+        } else if(user.getActivationCode().equals(code)) {
+            userMapper.updateStatus(userId, 1);
+            return ACTIVATION_SUCCESS;
+        }else {
+            return ACTIVATION_FAILURE;
+        }
     }
 }

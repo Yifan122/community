@@ -41,8 +41,8 @@ public class MapperTests {
 
     @Test
     public void testInsertUser(){
-        User newUser = new User();
-        System.out.println(userMapper.insertUser(newUser));
+//        User newUser = new User();
+//        System.out.println(userMapper.insertUser(newUser));
     }
 
     @Test

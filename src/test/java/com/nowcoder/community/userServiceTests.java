@@ -20,8 +20,7 @@ public class userServiceTests {
 
     @Test
     public void userRegisterTest(){
-        User user = null;
-
+        User user = new User("fandi2", "abc123", "8381455183@qq.com");
         userService.register(user);
     }
 }
