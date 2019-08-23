@@ -1,5 +1,6 @@
 package com.nowcoder.community.controller;
 
+import com.google.code.kaptcha.Producer;
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.service.UserService;
 import com.nowcoder.community.util.CommunityConstant;
@@ -13,6 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 @Controller
@@ -22,6 +30,9 @@ public class LoginController implements CommunityConstant {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private Producer kaptchaProducer;
 
     @RequestMapping(path = "/register", method = RequestMethod.GET)
     public String getRegisterPage() {
@@ -52,7 +63,6 @@ public class LoginController implements CommunityConstant {
 
     }
 
-
 //  http://localhost:8081/community/activation/101/activationCode
     @RequestMapping(path = "/activation/{userId}/{code}", method = RequestMethod.GET)
     public String activation(Model model, @PathVariable("userId") int userId, @PathVariable("code") String code) {
@@ -71,4 +81,25 @@ public class LoginController implements CommunityConstant {
         }
         return "/site/operate-result";
     }
+
+    @RequestMapping(path = "/kaptcha", method = RequestMethod.GET)
+    // 返回的不是页面，所以方法返回值为void
+     public void getKaptcha(HttpServletResponse response, HttpSession session) {
+        //生成验证码
+        String text = kaptchaProducer.createText();
+        BufferedImage image = kaptchaProducer.createImage(text);
+
+        // save the text into the session, because the kaptcha text is sensitive infomation
+        session.setAttribute("kaptcha", text);
+
+        // output the image to the browser
+        response.setContentType("image/png");
+        try {
+            OutputStream os = response.getOutputStream();
+            ImageIO.write(image, "png", os);
+        } catch (IOException e) {
+            logger.error("Unable to produce image" + e.getMessage());
+        }
+    }
+
 }

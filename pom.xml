@@ -66,13 +66,20 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 			<version>2.1.5.RELEASE</version>
 		</dependency>
+<!--	isblank-->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.9</version>
 		</dependency>
-
-
+<!--	生成验证码-->
+<!--	spring 没有对其进行整合-->
+<!--	需要自己写配置类-->
+		<dependency>
+			<groupId>com.github.penggle</groupId>
+			<artifactId>kaptcha</artifactId>
+			<version>2.3.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>
