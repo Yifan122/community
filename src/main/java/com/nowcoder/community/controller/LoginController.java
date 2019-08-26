@@ -49,13 +49,13 @@ public class LoginController implements CommunityConstant {
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public String login(Model model, String username, String password, String verifycode,
+    public String login(Model model, String username, String password, String code,
                         boolean rememberme, HttpSession session, HttpServletResponse response) {
         // 验证验证码
         String kaptcha = (String) session.getAttribute("kaptcha");
-        if (StringUtils.isBlank(kaptcha) || StringUtils.isBlank(verifycode) ||
-                !kaptcha.equalsIgnoreCase(verifycode)) {
-            model.addAttribute("verifycodeMsg", "Verification Code isn't right");
+        if (StringUtils.isBlank(kaptcha) || StringUtils.isBlank(code) ||
+                !kaptcha.equalsIgnoreCase(code)) {
+            model.addAttribute("codeMsg", "Verification Code isn't right");
             return "/site/login";
         }
 
