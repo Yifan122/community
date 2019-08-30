@@ -18,6 +18,16 @@ public class LoginRequiredInterceptor implements HandlerInterceptor {
     @Autowired
     private HostHolder hostHolder;
 
+    /**
+     * 对带有@LoginRequired 进行拦截判断，是否有权力登录该网页
+     * 如果没有权力则redirect到/login
+     *
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     * @throws Exception
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
