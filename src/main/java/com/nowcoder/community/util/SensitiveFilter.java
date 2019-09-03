@@ -4,7 +4,6 @@ import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -24,14 +23,14 @@ public class SensitiveFilter {
 
     private TrieNode rootNode = new TrieNode();
 
-    @Value("${community.sensitive.words}")
-    private String SENSITIVE_WORDS_FILE;
+    //TODO find out why it cann't
+//    @Value("${community.sensitive.words}")
+//    private String SENSITIVE_WORDS_FILE;
 
     // Read the sensitive words file and construct the Trie Tree
     @PostConstruct
     public void init() {
-        System.out.println(SENSITIVE_WORDS_FILE);
-        try (InputStream is = this.getClass().getClassLoader().getResourceAsStream(SENSITIVE_WORDS_FILE);
+        try (InputStream is = this.getClass().getClassLoader().getResourceAsStream("sensitive-words.txt");
              BufferedReader reader = new BufferedReader(new InputStreamReader(is))
         ) {
             String key;

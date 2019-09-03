@@ -45,7 +45,7 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
             // check the login ticket is valid or not
             if (loginTicket != null && loginTicket.getStatus() == 0 && loginTicket.getExpired().after(new Date())) {
                 // get the user according to the ticket
-                User user = userService.findUserId(loginTicket.getUserId());
+                User user = userService.findUserById(loginTicket.getUserId());
 
                 hostHolder.setUser(user);
             }

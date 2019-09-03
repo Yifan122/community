@@ -45,7 +45,7 @@ public class UserService implements CommunityConstant {
     private String contextPath;
 
 
-    public User findUserId(int userId){
+    public User findUserById(int userId) {
         return userMapper.selectById(userId);
     }
 

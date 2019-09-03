@@ -164,4 +164,15 @@ public class AlphaController {
         System.out.println(session.getAttribute("name"));
         return (String) session.getAttribute("name");
     }
+
+    @RequestMapping(path = "/ajax", method = RequestMethod.POST)
+    @ResponseBody
+    public String ajax(String name, int age) {
+        System.out.println(name);
+        System.out.println(age);
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("age", age);
+        return CommunityUtil.getJSONString(0, "success", map);
+    }
 }

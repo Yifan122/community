@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<p>
+    <input onclick="send();" type="button" value="send">
+</p>
+<script crossorigin="anonymous" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+        function send() {
+            $.post(
+                "/community/alpha/ajax",
+                {"name":"zhangsan", "age":23},
+                function(data) {
+                    console.log(data);
+                }
+
+            )
+        }
+
+
+
+</script>
+</body>
+</html>

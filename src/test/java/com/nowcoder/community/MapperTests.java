@@ -3,7 +3,6 @@ package com.nowcoder.community;
 import com.nowcoder.community.dao.DiscussPostMapper;
 import com.nowcoder.community.dao.UserMapper;
 import com.nowcoder.community.entity.DiscussPost;
-
 import com.nowcoder.community.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -39,11 +37,12 @@ public class MapperTests {
         System.out.println(user);
     }
 
-    @Test
-    public void testInsertUser(){
-//        User newUser = new User();
+//    @Test
+//    public void testInsertUser(){
+//        User newUser = new User("xi", "123", "123@abc");
+//        newUser.setStatus(1);
 //        System.out.println(userMapper.insertUser(newUser));
-    }
+//    }
 
     @Test
     public void testUpdateUser(){
