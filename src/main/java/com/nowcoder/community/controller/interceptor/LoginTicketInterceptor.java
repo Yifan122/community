@@ -3,6 +3,7 @@ package com.nowcoder.community.controller.interceptor;
 import com.nowcoder.community.entity.HostHolder;
 import com.nowcoder.community.entity.LoginTicket;
 import com.nowcoder.community.entity.User;
+import com.nowcoder.community.service.MessageService;
 import com.nowcoder.community.service.UserService;
 import com.nowcoder.community.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
 
     @Autowired
     private HostHolder hostHolder;
+
+    @Autowired
+    private MessageService messageService;
 
     /**
      * Store the user information before controller
@@ -58,6 +62,10 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
         User user = hostHolder.getUser();
         if (user != null && modelAndView != null) {
             modelAndView.addObject("loginUser", user);
+
+            int letterUnreadCount = messageService.findLetterUnreadCount(user.getId(), null);
+            modelAndView.addObject("letterUnreadCount", letterUnreadCount);
+
         }
     }
 
