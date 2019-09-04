@@ -1,0 +1,2 @@
+html 提交隐含的信息：
+<input type="hidden" name="entityType" value="2">
