@@ -49,41 +49,45 @@ public class UserService implements CommunityConstant {
         return userMapper.selectById(userId);
     }
 
-    public Map<String, Object> register(User user){
+    public User findUserByName(String username) {
+        return userMapper.selectByName(username);
+    }
+
+    public Map<String, Object> register(User user) {
         Map<String, Object> map = new HashMap<>();
 
-        if(user == null) {
+        if (user == null) {
             logger.error(logger.getName() + " User is null.");
             throw new IllegalArgumentException("参数不能为空");
         }
 
-        if(StringUtils.isBlank(user.getUsername())){
+        if (StringUtils.isBlank(user.getUsername())) {
             map.put("usernameMsg", "账号不能为空");
             return map;
         }
 
-        if(StringUtils.isBlank(user.getEmail())){
+        if (StringUtils.isBlank(user.getEmail())) {
             map.put("emailMsg", "邮箱不能为空");
             return map;
         }
 
-        if(StringUtils.isBlank(user.getPassword())){
+        if (StringUtils.isBlank(user.getPassword())) {
             map.put("passwordMsg", "密码不能为空");
             return map;
         }
 
-        if(userMapper.selectByName(user.getUsername()) != null){
+        if (userMapper.selectByName(user.getUsername()) != null) {
             map.put("usernameMsg", "账号已被占用");
             return map;
         }
 
-        if(userMapper.selectByEmail(user.getEmail()) != null){
+        if (userMapper.selectByEmail(user.getEmail()) != null) {
             map.put("emailMsg", "邮箱已被占用");
             return map;
         }
 
         user.setSalt(CommunityUtil.generateUUID().substring(0, 5));
-        user.setPassword(CommunityUtil.md5(user.getPassword()+user.getSalt()));
+        user.setPassword(CommunityUtil.md5(user.getPassword() + user.getSalt()));
         user.setType(0);
         user.setStatus(0);
         user.setActivationCode(CommunityUtil.generateUUID());
@@ -97,7 +101,7 @@ public class UserService implements CommunityConstant {
         System.out.println(user.getEmail());
 
         // set activation url http://localhost:8081/community/activation/101/activationCode
-        String activationUrl = domain+contextPath+"/activation/" + user.getId() + "/" +user.getActivationCode();
+        String activationUrl = domain + contextPath + "/activation/" + user.getId() + "/" + user.getActivationCode();
         context.setVariable("url", activationUrl);
         String content = templateEngine.process("/mail/activation", context);
 
@@ -111,12 +115,12 @@ public class UserService implements CommunityConstant {
     public int activation(int userId, String code) {
         User user = userMapper.selectById(userId);
 
-        if(user.getStatus() == 1) {
+        if (user.getStatus() == 1) {
             return ACTIVATION_REPEAT;
-        } else if(user.getActivationCode().equals(code)) {
+        } else if (user.getActivationCode().equals(code)) {
             userMapper.updateStatus(userId, 1);
             return ACTIVATION_SUCCESS;
-        }else {
+        } else {
             return ACTIVATION_FAILURE;
         }
     }

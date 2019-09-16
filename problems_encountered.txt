@@ -3,3 +3,15 @@
     -> if not, start the Mysql Server:
     -> sudo /usr/local/mysql-8.0.17-macos10.14-x86_64/support-files/mysql.server start
     -> ref: http://www.mysqltutorial.org/mysql-create-database/
+
+2. run redis-server
+    -> redis-server /usr/local/etc/redis.conf
+
+3. run redis client
+    -> redis-cli
+
+    set key value (use ":" to seperate two words)
+    incr key
+    decr key
+    hset key field value
+    hget key field

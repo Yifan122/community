@@ -3,6 +3,7 @@ package com.nowcoder.community.controller;
 import com.nowcoder.community.entity.*;
 import com.nowcoder.community.service.CommentService;
 import com.nowcoder.community.service.DiscussPostService;
+import com.nowcoder.community.service.LikeService;
 import com.nowcoder.community.service.UserService;
 import com.nowcoder.community.util.CommunityConstant;
 import com.nowcoder.community.util.CommunityUtil;
@@ -32,6 +33,9 @@ public class DicussPostController implements CommunityConstant {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private LikeService likeService;
 
     @Autowired
     private HostHolder holder;
@@ -78,6 +82,13 @@ public class DicussPostController implements CommunityConstant {
 
         List<Map<String, Object>> commentVoList = null;
 
+        // 查询赞的数目
+        long pageLikeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, discussPostId);
+        model.addAttribute("likeCount", pageLikeCount);
+        int pageLikeStatus = holder.getUser() == null ?
+                0 : likeService.findEntityLikeStatus(holder.getUser().getId(), ENTITY_TYPE_POST, discussPostId);
+        model.addAttribute("likeStatus", pageLikeStatus);
+
         // 1、对帖子进行评论
         // 2、对评论进行回复
         if (commentList != null) {
@@ -88,9 +99,15 @@ public class DicussPostController implements CommunityConstant {
                 commentVo.put("comment", comment);
                 commentVo.put("user", userService.findUserById(comment.getUserId()));
 
-                //查询所有对该评论的回复
+                // 查询评论的赞
+                commentVo.put("likeCount", likeService.findEntityLikeCount(ENTITY_TYPE_COMMENT, comment.getId()));
+                int commentLikeStatus = holder.getUser() == null ? 0 :
+                        likeService.findEntityLikeStatus(holder.getUser().getId(), ENTITY_TYPE_COMMENT, comment.getId());
+                commentVo.put("likeStatus", commentLikeStatus);
+
+                // 查询所有对该评论的回复
                 List<Comment> replyList = commentService.findCommentsByEntity(ENTITY_TYPE_COMMENT, comment.getId(), 0, Integer.MAX_VALUE);
-                //将帖子的回复也存入commentVo
+                // 将帖子的回复也存入commentVo
                 List<Map<String, Object>> replyVoList = new ArrayList<>();
                 if (replyList != null) {
                     for (Comment reply : replyList) {
@@ -101,6 +118,11 @@ public class DicussPostController implements CommunityConstant {
                         //查询target
                         User target = reply.getTargetId() == 0 ? null : userService.findUserById(reply.getTargetId());
                         replyVo.put("target", target);
+
+                        replyVo.put("likeCount", likeService.findEntityLikeCount(ENTITY_TYPE_COMMENT, reply.getId()));
+                        int replyLikeStatus = holder.getUser() == null ? 0 :
+                                likeService.findEntityLikeStatus(holder.getUser().getId(), ENTITY_TYPE_COMMENT, reply.getId());
+                        replyVo.put("likeStatus", replyLikeStatus);
                         replyVoList.add(replyVo);
                     }
                 }
