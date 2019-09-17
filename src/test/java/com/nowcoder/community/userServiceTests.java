@@ -1,7 +1,9 @@
 package com.nowcoder.community;
 
 import com.nowcoder.community.dao.UserMapper;
+import com.nowcoder.community.entity.User;
 import com.nowcoder.community.service.UserService;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,10 +21,15 @@ public class userServiceTests {
     @Autowired
     private UserMapper userMapper;
 
-//    @Test
-//    public void userRegisterTest(){
-//        User user = new User("haha", "abc123", "838183@qq.com");
-//        userService.register(user);
-//        userMapper.updateStatus(159, 1);
-//    }
+    @Test
+    public void userRegisterTest() {
+        User user = new User();
+        user.setUsername("bbb123");
+        user.setEmail("bbb123@aa.com");
+        user.setPassword("bbb123");
+        userService.register(user);
+        userMapper.updateStatus(161, 1);
+    }
+
+
 }

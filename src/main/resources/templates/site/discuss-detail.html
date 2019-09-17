@@ -44,7 +44,7 @@
 							<ul class="d-inline float-right">
 								<li class="d-inline ml-2">
 									<a class="text-primary" href="javascript:;"
-									   th:onclick="|like(this, 1, ${post.id});|">
+									   th:onclick="|like(this, 1, ${post.id}, ${post.userId});|">
 										<b th:text="${likeStatus==1?'已赞':'赞'}">赞</b> <i th:text="${likeCount}">11</i>
 									</a>
 								</li>
@@ -94,7 +94,7 @@
 								<ul class="d-inline float-right">
 									<li class="d-inline ml-2">
 										<a class="text-primary" href="javascript:;"
-										   th:onclick="|like(this, 2, ${map.comment.id});|">
+										   th:onclick="|like(this, 2, ${map.comment.id}, ${map.comment.userId});|">
 											<b th:text="${map.likeStatus==1?'已赞':'赞'}">赞</b>(<i
 												th:text="${map.likeCount}">1</i>)
 										</a>
@@ -123,7 +123,7 @@
 										<ul class="d-inline float-right">
 											<li class="d-inline ml-2">
 												<a class="text-primary" href="javascript:;"
-												   th:onclick="|like(this, 2, ${reply.reply.id});|">
+												   th:onclick="|like(this, 2, ${reply.reply.id}, ${reply.reply.userId});|">
 													<b th:text="${reply.likeStatus==1?'已赞':'赞'}">赞</b>(<i
 														th:text="${reply.likeCount}">1</i>)
 												</a></li>

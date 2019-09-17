@@ -1,2 +1,5 @@
 html 提交隐含的信息：
 <input type="hidden" name="entityType" value="2">
+
+thymeleaf 时间格式化
+${#dates.format(map.post.createTime, 'yyyy-MM-dd HH:mm:ss')}
