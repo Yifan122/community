@@ -6,3 +6,10 @@ ${#dates.format(map.post.createTime, 'yyyy-MM-dd HH:mm:ss')}
 
 java记录时间
 System.currentTimeMillis()
+
+Cookie:
+1. Generate cookie: Cookie cookie = new Cookie("name", value);
+2. Store into response: response.addCookie(cookie)
+3. Set time: cookie.setMaxAge(60);
+4. Set path: cookie.setPath(contextPath);
+5. Get cookie value: @CookieValue("name")

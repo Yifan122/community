@@ -7,6 +7,9 @@ public class RedisKeyUtil {
     private static final String PREFIX_USER_LIKE = "like:user";
     private static final String PREFIX_FOLLOWEE = "followee";
     private static final String PREFIX_FOLLOWER = "follower";
+    private static final String PREFIX_KAPTCHA = "kaptcha";
+    private static final String PREFIX_TICKET = "ticket";
+    private static final String PREFIX_USER = "user";
 
     // 某个实体的赞
     // like:entity:entityTye:entityId -> set(UserId)
@@ -31,5 +34,36 @@ public class RedisKeyUtil {
     // follower:entityType:entityId -> zset(userId, now)
     public static String getFollowerKey(int entityType, int entityId) {
         return PREFIX_FOLLOWER + SPLIT + entityType + SPLIT + entityId;
+    }
+
+    /**
+     * 登录验证码，将其放在Redis中能提高效率，并且登录验证码存活的时间
+     * 并不是很长，约为10-60秒
+     *
+     * @param owner 用户登录时给其发的临时凭证，存在cookie里
+     * @return
+     */
+    public static String getKaptchaKey(String owner) {
+        return PREFIX_KAPTCHA + SPLIT + owner;
+    }
+
+    /**
+     * 生成Redis ticket key
+     *
+     * @param ticket 登录凭证
+     * @return
+     */
+    public static String getTicketKey(String ticket) {
+        return PREFIX_TICKET + SPLIT + ticket;
+    }
+
+    /**
+     * 生成user的Key
+     *
+     * @param userId
+     * @return
+     */
+    public static String getUserKey(int userId) {
+        return PREFIX_USER + SPLIT + userId;
     }
 }
