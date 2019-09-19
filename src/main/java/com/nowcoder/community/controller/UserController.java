@@ -3,8 +3,10 @@ package com.nowcoder.community.controller;
 import com.nowcoder.community.annotation.LoginRequired;
 import com.nowcoder.community.entity.HostHolder;
 import com.nowcoder.community.entity.User;
+import com.nowcoder.community.service.FollowService;
 import com.nowcoder.community.service.LikeService;
 import com.nowcoder.community.service.UserService;
+import com.nowcoder.community.util.CommunityConstant;
 import com.nowcoder.community.util.CommunityUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,7 +28,7 @@ import java.io.OutputStream;
 
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class UserController implements CommunityConstant {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -47,6 +49,9 @@ public class UserController {
 
     @Autowired
     private LikeService likeService;
+
+    @Autowired
+    private FollowService followService;
 
     @LoginRequired
     @RequestMapping(path = "/setting", method = RequestMethod.GET)
@@ -125,6 +130,7 @@ public class UserController {
     @RequestMapping(path = "/profile/{userId}", method = RequestMethod.GET)
     public String getProfilePage(@PathVariable("userId") int userId, Model model) {
         User user = userService.findUserById(userId);
+        User visitor = hostHolder.getUser();
 
         if (user == null) {
             throw new RuntimeException(String.format("UserId: %d doesn't exist", userId));
@@ -132,9 +138,26 @@ public class UserController {
 
         // 用户
         model.addAttribute("user", user);
+
         // 点赞数量
         int likeCount = likeService.findUserLikeCount(userId);
         model.addAttribute("likeCount", likeCount);
+
+        // Get the number of the followers.
+        long followers = followService.findFollowerCount(userId, ENTITY_TYPE_USER);
+        model.addAttribute("followers", followers);
+
+        // Get the number of the followees.
+        long followees = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
+        model.addAttribute("followees", followees);
+
+        // Check has followed or not.
+        boolean hasFollowed = false;
+        if (user != null) {
+            hasFollowed = followService.hasFollowed(visitor.getId(), userId, ENTITY_TYPE_USER);
+        }
+        model.addAttribute("hasFollowed", hasFollowed);
+
         return "/site/profile";
     }
 
