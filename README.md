@@ -13,3 +13,8 @@ Use redis to cache hot data and che the Spring Session object.
 This can improve the efficiency and solve the problem of Session 
 storage in distributed server
 </li>
+
+<li>2. ***Kafka***
+
+Use Kafka to build real-time data pipelines and streaming.
+</li>

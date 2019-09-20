@@ -13,3 +13,22 @@ Cookie:
 3. Set time: cookie.setMaxAge(60);
 4. Set path: cookie.setPath(contextPath);
 5. Get cookie value: @CookieValue("name")
+
+Kafka:
+1. set the config file: config/zookeeper.properties, config/server.properties
+2. start zookeeper server and kafka server:
+    - ./bin/zookeeper-server-start.sh config/zookeeper.properties
+    - ./bin/kafka-server-start.sh config/zookeeper.properties
+3. kafka create topics:
+    - ./bin/kafka-topics.sh --create --bootstrap-server localhost:9092
+    --replication-factor 1 --partitions 1 --topic test
+4. kafka producer:
+    - ./bin/kafka-console-producer.sh --broker-list
+    localhost:9092 --topic test
+5. kafka consumer:
+    - ./bin/kafka-console-consumer.sh --bootstrap-server
+    localhost:9092 --topic test --from-beginning
+
+JSON String:
+转成String：JSONObject.toJSONString(Object)
+String转成Object：JSONObject.parseObject(Object.toString(), Object.class)
